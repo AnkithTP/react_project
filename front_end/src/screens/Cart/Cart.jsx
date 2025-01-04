@@ -6,7 +6,7 @@ import { assets } from '../../assets/assets'
 import {Link} from 'react-router-dom'
 
 const Cart = () => {
-  const { food_list, cartItems, addToCart, removeFromCart, getTotalCartAmount } = useContext(StoreContext)
+  const { food_list, cartItems, addToCart, removeFromCart, getTotalCartAmount,url } = useContext(StoreContext)
 
   return (
     <div className='cart'>
@@ -27,7 +27,7 @@ const Cart = () => {
               return (
                 <>
                   <div className="cart-items-title cart-items-item" key={food._id}>
-                    <img src={food.image} alt="" />
+                    <img src={url+"/images/"+food.image} alt="" />
                     <p>{food.name}</p>
                     <p>₹{food.price}</p>
                     <div className='quantity-counter'>

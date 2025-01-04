@@ -1,36 +1,74 @@
-import React from 'react'
-import './LoginPopup.css'
+import React, { useContext,useState,useEffect } from 'react'
+import './LoginPopUp.css'
 import { assets } from '../../assets/assets'
-import {useState} from 'react'
+import { StoreContext } from '../../context/StoreContext'
+import axios from 'axios'
+import{toast} from'react-toastify'
 
-const LoginPopup = ({setShowLogin}) => {
-    const [curState,setState]=useState('signup')
+
+const LoginPopUp = ({setShowLogin}) => {
+    const {url,setToken} = useContext(StoreContext)
+    const [curState, setState] = useState('Log In')
+    const [data, setData] = useState({
+      name:"",
+      email:"",
+      password:""
+    })
+    const onChangeHandler = (e) => {
+      const {name,value}=e.target;
+      setData({...data,[name]:value})
+    }
+    // useEffect(()=>{
+    //   console.log(data)
+    // },[data])
+
+    const onLogin = async (e) => {
+      e.preventDefault()
+      let newUrl = url
+      if(curState==='Sign Up'){
+        newUrl += '/api/user/register'
+      }
+      else{
+        newUrl += '/api/user/login'
+      }
+      try{
+      const response = await axios.post(newUrl, data)
+      
+        setToken(response.data.token)
+        localStorage.setItem('token',response.data.token)
+        setShowLogin(false)
+        toast.success('Login successful')
+      }catch(error){
+        toast.error(error.response.data.message)
+      }
+      
+    }
+    
   return (
-    <div className="login-popup">
-    <form className='login-popup-container'>
-        <div className='login-popup-title'>
-            <h2>{curState ==='signup'? 'SignUp':'LogIn'}</h2>
-            <img src={assets.cross_icon} onClick={()=>setShowLogin(false)} alt="" />
-        </div>
-        <div className="login-popup-inputs">
-            {curState==='signup'&& <input type='text' placeholder='your name' required/>}
-            <input type='email' placeholder='E-mail' required/>
-            <input type='password' placeholder='your password' required/>
-
-        </div>
-        <button>{curState==='signUp'? 'Sign Up' : 'Log In'}</button>
-        <div className="login-popup-condition">
-        <input type='checkbox'/>
-        <p>By Continuing I agree your Terms and Conditions</p>
-        </div>
-        {
-            curState==='signup'
-            ?<p>Already have an account?<span onClick={()=>setState('login')}>Login</span></p>
-            :<p>Create new account?<span onClick={()=>setState('signup')}>Click here</span></p>
-        }
-    </form>
+    <div className='login-popup'>
+       <form onSubmit={onLogin} action='' className='login-popup-container'>
+          <div className="login-popup-title">
+            <h2>{curState}</h2>
+            <img src={assets.cross_icon} onClick={()=>setShowLogin(false)} alt=""/>
+          </div>
+          <div className="login-popup-inputs">
+            {curState!=="Log In" ? <input name="name" onChange={onChangeHandler} value={data.name} type='text' placeholder='Your Name' required />:<></>}
+           <input name='email' onChange={onChangeHandler} value={data.email} type="email" placeholder="E-mail" required />
+            <input name='password' onChange={onChangeHandler} value={data.password} type="password" placeholder="Password" required />
+          </div>
+          <button type='submit' className='btn'>{curState ==='Sign Up'? 'Create Account' : 'Log In'}</button>
+          <div className="login-popup-condition">
+            <input type="checkbox"/>
+            <p>By continuing, I agree to the terms and conditions</p>
+          </div>
+          {
+            curState ==='Sign Up'
+              ?<p>Already have an account?<span onClick={()=>setState('Log In')}>Log In</span></p>
+              :<p>Create a new account?<span onClick={()=>setState('Sign Up')}>Click here</span></p>
+          }
+       </form>
     </div>
   )
 }
 
-export default LoginPopup
+export default LoginPopUp
