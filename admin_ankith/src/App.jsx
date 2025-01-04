@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar/Navbar";
 import { Route,Routes } from 'react-router-dom';
 import Add from "./screens/Add/Add"
 import List from "./screens/List/List"
-import Orders from "./screens/orders/orders"
+import Orders from "./screens/Orders/Orders"
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
