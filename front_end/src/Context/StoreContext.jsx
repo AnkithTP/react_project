@@ -13,7 +13,7 @@ const StoreContextProvider = (props) => {
   const[token,setToken]=useState("");
 
   
-  const url ="http://localhost:4000"
+  const url ="https://react-project-1-kq9z.onrender.com"
   const [cartItems, setCartItems]=useState({});
   const addToCart=async (itemId)=>{
     if(!cartItems[itemId]){

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 
 const App = () => {
-  const url= 'http://localhost:4000'
+  const url= 'https://react-project-1-kq9z.onrender.com'
   return (
     <div className="app">
       <ToastContainer/>
